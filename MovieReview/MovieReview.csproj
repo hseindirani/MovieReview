@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Repositories\MovieController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="TextFile.txt" />
   </ItemGroup>
 

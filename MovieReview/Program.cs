@@ -1,6 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using MovieReview;
 using MovieReview.Data;
+using MovieReview.Interfaces;
+using MovieReview.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddTransient<Seed>();
+builder.Services.AddScoped<IMovieRepository , MovieRepository>();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -16,19 +19,19 @@ builder.Services.AddDbContext<DataContext>(options =>
 
 var app = builder.Build();
 
-// Run seeding manually if called with "seeddata" argument
-if (args.Length == 1 && args[0].ToLower() == "seeddata")
-    SeedData(app);
-
-void SeedData(IHost app)
+using (var scope = app.Services.CreateScope())
 {
-    var scopedFactory = app.Services.GetService<IServiceScopeFactory>();
-    using (var scope = scopedFactory.CreateScope())
-    {
-        var service = scope.ServiceProvider.GetService<Seed>();
-        service.SeedDataContext();
-    }
+    var context = scope.ServiceProvider.GetRequiredService<DataContext>();
+
+    // Ensure database is created & migrations are applied
+    context.Database.Migrate();
+
+    var seeder = scope.ServiceProvider.GetRequiredService<Seed>();
+    Console.WriteLine(">>> Seeding started...");
+    seeder.SeedDataContext();
+    Console.WriteLine(">>> Seeding finished!");
 }
+
 
 
 // Configure the HTTP request pipeline.
@@ -43,3 +46,4 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+

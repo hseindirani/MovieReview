@@ -32,12 +32,14 @@ namespace MovieReview
                 var reviewer1 = new Reviewer { FirstName = "Huss", LastName = "Dirani" };
                 var reviewer2 = new Reviewer { FirstName = "Sara", LastName = "Anders" };
 
+                DateTime Utc(int y, int m, int d) => new DateTime(y, m, d, 0, 0, 0, DateTimeKind.Utc);
+
                 var movie1 = new Movie
                 {
                     // your table has Name, not Title
                     Name = "The Dark Knight",
                     // your table has ReleasedDate (with d)
-                    ReleasedDate = new DateTime(2008, 7, 18),
+                    ReleasedDate = new DateTime(2008, 7, 18, 0, 0, 0, DateTimeKind.Utc),
                     MovieGenres = new List<MovieGenre>
                     {
                         new MovieGenre { Genre = action }
@@ -68,7 +70,7 @@ namespace MovieReview
                 var movie2 = new Movie
                 {
                     Name = "Inception",
-                    ReleasedDate = new DateTime(2010, 7, 16),
+                    ReleasedDate = new DateTime(2010, 7, 16, 0, 0, 0, DateTimeKind.Utc),
                     MovieGenres = new List<MovieGenre>
                     {
                         new MovieGenre { Genre = drama }
