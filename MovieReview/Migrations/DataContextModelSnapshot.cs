@@ -67,7 +67,7 @@ namespace MovieReview.Migrations
                     b.Property<string>("Name")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("RealiseDate")
+                    b.Property<DateTime>("ReleasedDate")
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
@@ -168,7 +168,7 @@ namespace MovieReview.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<int?>("CountryId")
+                    b.Property<int>("CountryId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Name")
@@ -241,9 +241,13 @@ namespace MovieReview.Migrations
 
             modelBuilder.Entity("MovieReview.Models.Studio", b =>
                 {
-                    b.HasOne("MovieReview.Models.Country", null)
+                    b.HasOne("MovieReview.Models.Country", "Country")
                         .WithMany("Studios")
-                        .HasForeignKey("CountryId");
+                        .HasForeignKey("CountryId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Country");
                 });
 
             modelBuilder.Entity("MovieReview.Models.Country", b =>
