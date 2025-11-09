@@ -1,0 +1,30 @@
+﻿# Visual Studio
+.vs/
+.vscode/
+*.user
+*.suo
+
+# Build results
+bin/
+obj/
+out/
+
+# Logs
+*.log
+*.tlog
+
+# Environment files
+appsettings.Development.json
+appsettings.Local.json
+.env
+
+# Database and EF cache
+*.db
+*.sqlite
+*.mdf
+*.ldf
+
+# Other temp files
+*.cache
+*.pdb
+*.tmp
