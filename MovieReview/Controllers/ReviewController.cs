@@ -24,7 +24,7 @@ namespace MovieReview.Controllers
         [ProducesResponseType(200, Type = typeof(IEnumerable<Review>))]
         public IActionResult GetReviews()
         {
-            //var movies = _movieRepository.GetMovies();
+            
             var reviews = _mapper.Map<List<ReviewDto>>(_reviewRepository.GetReviews());
 
             if (!ModelState.IsValid)
@@ -39,7 +39,7 @@ namespace MovieReview.Controllers
         {
             if (!_reviewRepository.ReviewExists(reviewId))
                 return NotFound();
-            var review = _mapper.Map<MovieDto>(_reviewRepository.GetReview(reviewId));
+            var review = _mapper.Map<ReviewDto>(_reviewRepository.GetReview(reviewId));
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
