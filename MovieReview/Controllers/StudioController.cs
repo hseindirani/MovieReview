@@ -1,0 +1,78 @@
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
+using MovieReview.Dto;
+using MovieReview.Interfaces;
+using MovieReview.Models;
+using MovieReview.Repositories;
+
+namespace MovieReview.Controllers
+{
+    [Route("api/[controller]")]
+    [ApiController]
+    public class StudioController : ControllerBase
+    {
+        private readonly IStudioRepository _studioRepository;
+        private readonly IMapper _mapper;
+
+        public StudioController(IStudioRepository studioRepository,IMapper mapper)
+        {
+            _studioRepository = studioRepository;
+            _mapper = mapper;
+        }
+        [HttpGet]
+        [ProducesResponseType(200, Type = typeof(IEnumerable<Studio>))]
+        public IActionResult GetCountries()
+        {
+
+            var studios = _mapper.Map<List<StudioDto>>(_studioRepository.GetStudios());
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            return Ok(studios);
+        }
+        [HttpGet("{studioId}")]
+        [ProducesResponseType(200, Type = typeof(Studio))]
+        [ProducesResponseType(400)]
+        public IActionResult GetCountry(int studioId)
+        {
+            if (!_studioRepository.StudioExists(studioId))
+                return NotFound();
+            var studio = _mapper.Map<StudioDto>(_studioRepository.GetStudio(studioId));
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            return Ok(studio);
+
+        }
+        [HttpGet("movies/{studioId}")]
+        [ProducesResponseType(200, Type = typeof(Studio))]
+        [ProducesResponseType(400)]
+        public IActionResult GetStudioOfAMovie(int movId)
+        {
+
+            var studio = _mapper.Map<StudioDto>(_studioRepository.GetStudioOfAMovie(movId));
+            if (!ModelState.IsValid)
+                return BadRequest();
+            return Ok(studio);
+
+
+        }
+        [HttpGet("{studioId}/movie")]
+        [ProducesResponseType(200, Type = typeof(Studio))]
+        [ProducesResponseType(400)]
+        public IActionResult GetMovieByStudio(int studioId)
+        {
+            if (!_studioRepository.StudioExists(studioId))
+            {
+                return NotFound();
+            }
+
+            var movie =_mapper.Map<List<MovieDto>>(_studioRepository.GetMovieByStudio(studioId));
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            return Ok(movie);
+        }
+    }
+}
