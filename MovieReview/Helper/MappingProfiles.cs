@@ -10,6 +10,7 @@ namespace MovieReview.Helper
         {
             CreateMap<Movie, MovieDto>();
             CreateMap<Genre,GenreDTO>();
+            CreateMap<GenreDTO, Genre>();
             CreateMap<Country,CountryDto>();
             CreateMap<Studio,StudioDto>();
             CreateMap<Review,ReviewDto>();

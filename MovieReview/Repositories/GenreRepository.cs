@@ -13,6 +13,22 @@ namespace MovieReview.Repositories
             _context = context;
         }
 
+        public bool CreateGenre(Genre genre)
+        {
+            //change tracker
+            //state: adding, updating, modifying..
+            //connected vs disconnected
+            _context.Add(genre);
+            return Save();
+
+        }
+
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ?true : false;
+        }
+
         bool IGenreRepository.GenreExists(int id)
         {
            return _context.Genres.Any(c => c.Id == id);

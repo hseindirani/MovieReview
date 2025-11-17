@@ -15,7 +15,8 @@ namespace MovieReview.Controllers
         private readonly IGenreRepository _genreRepository;
         private readonly IMapper _mapper;
 
-        public GenreController(IGenreRepository genreRepository, IMapper mapper) {
+        public GenreController(IGenreRepository genreRepository, IMapper mapper)
+        {
             _genreRepository = genreRepository;
             _mapper = mapper;
         }
@@ -51,16 +52,49 @@ namespace MovieReview.Controllers
         {
 
             var movies = _mapper.Map<List<MovieDto>>(_genreRepository.GetMoviesByGenre(genreId));
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest();
             return Ok(movies);
 
 
         }
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+
+        public IActionResult CreateGenre([FromBody] GenreDTO genreCreate)
+        {
+            if (genreCreate == null)
+                return BadRequest(ModelState);
+            var genre = _genreRepository.GetGenres()
+                        .Where(c => c.Name.Trim().ToUpper() == genreCreate.Name.TrimEnd().ToUpper())
+                         .FirstOrDefault();
+            if (genre != null)
+            {
+                ModelState.AddModelError("", "Genre alread exists");
+                return StatusCode(422, ModelState);
+            }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            var genreMap = _mapper.Map<Genre>(genreCreate);
+            if (!_genreRepository.CreateGenre(genreMap))
+            {
+                ModelState.AddModelError("", "Something went wromg while saving ");
+                return StatusCode(500, ModelState);
+
+            }
+            return Ok("Successfully created");
 
 
 
 
 
+
+
+
+
+
+
+        }
     }
 }

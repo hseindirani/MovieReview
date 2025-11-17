@@ -8,5 +8,8 @@ namespace MovieReview.Interfaces
         Genre GetGenreById(int id);
         ICollection<Movie> GetMoviesByGenre(int  genreId);
         bool GenreExists(int id);
+        bool CreateGenre(Genre genre);
+        bool Save();
     }
+
 }
