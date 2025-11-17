@@ -9,3 +9,11 @@ namespace MovieReview.Dto
         public Country Country { get; set; }
     }
 }
+public class CreateStudioDto
+{
+   
+    public string Name { get; set; }
+    public int CountryId { get; set; }
+
+
+}

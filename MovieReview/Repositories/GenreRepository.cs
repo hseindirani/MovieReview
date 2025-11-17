@@ -23,11 +23,7 @@ namespace MovieReview.Repositories
 
         }
 
-        public bool Save()
-        {
-            var saved = _context.SaveChanges();
-            return saved > 0 ?true : false;
-        }
+      
 
         bool IGenreRepository.GenreExists(int id)
         {
@@ -47,6 +43,11 @@ namespace MovieReview.Repositories
         ICollection<Movie> IGenreRepository.GetMoviesByGenre(int genreId)
         {
          return _context.MovieGenres.Where(e =>e.GenreId == genreId).Select(c=> c.Movie).ToList();
+        }
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
         }
     }
 }

@@ -86,15 +86,6 @@ namespace MovieReview.Controllers
             return Ok("Successfully created");
 
 
-
-
-
-
-
-
-
-
-
         }
     }
 }

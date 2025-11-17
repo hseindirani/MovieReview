@@ -15,6 +15,15 @@ namespace MovieReview.Repositories
             _context = context;
             _mapper = mapper;
         }
+
+        public bool CreateCountry(Country country)
+        {
+           _context.Add(country);
+            return Save();
+        }
+
+       
+
         bool ICountryRepository.CountryExist(int id)
         {
            return _context.Countries.Any(c => c.Id == id);
@@ -33,6 +42,11 @@ namespace MovieReview.Repositories
         Country ICountryRepository.GetCountryByStudio(int studioId)
         {
             return _context.Studios.Where(s => s.Id == studioId).Select(c => c.Country).FirstOrDefault();
+        }
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ? true : false;
         }
     }
 }

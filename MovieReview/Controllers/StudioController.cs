@@ -74,5 +74,35 @@ namespace MovieReview.Controllers
                 return BadRequest(ModelState);
             return Ok(movie);
         }
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+
+        public IActionResult CreateStudio([FromBody] CreateStudioDto studioCreate)
+        {
+            if (studioCreate == null)
+                return BadRequest(ModelState);
+            var studio = _studioRepository.GetStudios()
+                        .Where(c => c.Name.Trim().ToUpper() == studioCreate.Name.TrimEnd().ToUpper())
+                         .FirstOrDefault();
+            if (studio != null)
+            {
+                ModelState.AddModelError("", "Studio already exists");
+                return StatusCode(422, ModelState);
+            }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            var studioMap = _mapper.Map<Studio>(studioCreate);
+            studioMap.CountryId = studioCreate.CountryId;
+            if (!_studioRepository.CreateStudio(studioMap))
+            {
+                ModelState.AddModelError("", "Something went wromg while saving ");
+                return StatusCode(500, ModelState);
+
+            }
+            return Ok("Successfully created");
+
+
+        }
     }
 }
