@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using MovieReview.Dto;
 using MovieReview.Interfaces;
 using MovieReview.Models;
+using MovieReview.Repositories;
 
 namespace MovieReview.Controllers
 {
@@ -60,6 +61,37 @@ namespace MovieReview.Controllers
             if (!ModelState.IsValid)
                 return BadRequest();
             return Ok(rating);
+
+
+        }
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
+
+        public IActionResult CreateMovie([FromQuery]int studioId,[FromQuery] int genreId,[FromBody] MovieDto movieCreate)
+        {
+            if (movieCreate == null)
+                return BadRequest(ModelState);
+
+            var movie = _movieRepository.GetMovies()
+                        .Where(m => m.Name.Trim().ToUpper() == movieCreate.Name.TrimEnd().ToUpper())
+                         .FirstOrDefault();
+            if (movie != null)
+            {
+                ModelState.AddModelError("", "Movie already exists");
+                return StatusCode(422, ModelState);
+            }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            var movieMap = _mapper.Map<Movie>(movieCreate);
+
+            if (!_movieRepository.CreateMovie(studioId,genreId,movieMap))
+            {
+                ModelState.AddModelError("", "Something went wromg while saving ");
+                return StatusCode(500, ModelState);
+
+            }
+            return Ok("Successfully created");
 
 
         }

@@ -1,6 +1,7 @@
 ﻿using MovieReview.Data;
 using MovieReview.Interfaces;
 using MovieReview.Models;
+using System.Diagnostics.Metrics;
 namespace MovieReview.Repositories
 
 {
@@ -10,6 +11,30 @@ namespace MovieReview.Repositories
         public MovieRepository(DataContext context)
         {
             _context = context;
+        }
+
+        public bool CreateMovie(int studioId, int genreId, Movie movie)
+        {
+            var movieStudioEntity =_context.Studios.Where(s => s.Id == studioId).FirstOrDefault();
+            var genre = _context.Genres.Where(s => s.Id == genreId).FirstOrDefault();
+
+            var movieStudio = new MovieStudio()
+            {
+                Studio = movieStudioEntity,
+                Movie = movie,
+
+            };
+
+            _context.Add(movieStudio);
+
+            var movieGenre = new MovieGenre()
+            {
+                Genre = genre,
+                Movie = movie,
+            };
+            _context.Add(movieGenre);
+            _context.Add(movie);
+            return Save();
         }
 
         public Movie GetMovie(int id)
@@ -37,6 +62,12 @@ namespace MovieReview.Repositories
         public bool MovieExist(int moId)
         {
             return _context.Movies.Any(p => p.Id == moId);
+        }
+
+        public bool Save()
+        {
+            var saved = _context.SaveChanges();
+            return saved > 0 ?true : false;
         }
     }
 }

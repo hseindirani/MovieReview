@@ -57,6 +57,36 @@ namespace MovieReview.Controllers
             return Ok(review);
 
 
+
         }
+        //[HttpPost]
+        //[ProducesResponseType(204)]
+        //[ProducesResponseType(400)]
+
+        //public IActionResult CreateGenre([FromBody] GenreDTO genreCreate)
+        //{
+        //    if (genreCreate == null)
+        //        return BadRequest(ModelState);
+        //    var genre = _genreRepository.GetGenres()
+        //                .Where(c => c.Name.Trim().ToUpper() == genreCreate.Name.TrimEnd().ToUpper())
+        //                 .FirstOrDefault();
+        //    if (genre != null)
+        //    {
+        //        ModelState.AddModelError("", "Genre alread exists");
+        //        return StatusCode(422, ModelState);
+        //    }
+        //    if (!ModelState.IsValid)
+        //        return BadRequest(ModelState);
+        //    var genreMap = _mapper.Map<Genre>(genreCreate);
+        //    if (!_genreRepository.CreateGenre(genreMap))
+        //    {
+        //        ModelState.AddModelError("", "Something went wromg while saving ");
+        //        return StatusCode(500, ModelState);
+
+        //    }
+        //    return Ok("Successfully created");
+
+
+        //}
     }
     }
