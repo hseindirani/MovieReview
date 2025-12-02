@@ -15,7 +15,9 @@ namespace MovieReview.Repositories
         }
         public Reviewer GetReviewer(int reviewerId)
         {
-            return _context.Reviewers.Where(r => r.Id == reviewerId).Include(e => e.Id).FirstOrDefault();
+            //return _context.Reviewers.Where(r => r.Id == reviewerId).Include(e => e.Id).FirstOrDefault();
+            return _context.Reviewers.Include(r => r.Reviews)   
+       .FirstOrDefault(r => r.Id == reviewerId);
         }
 
         public ICollection<Reviewer> GetReviewers()

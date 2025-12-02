@@ -14,11 +14,15 @@ namespace MovieReview.Controllers
     {
         private readonly IReviewRepository _reviewRepository;
         private readonly IMapper _mapper;
+        private readonly IMovieRepository _movieRepository;
+        private readonly IReviewerRepository _reviewerRepository;
 
-        public ReviewController(IReviewRepository reviewRepository, IMapper mapper)
+        public ReviewController(IReviewRepository reviewRepository, IMapper mapper, IMovieRepository movieRepository, IReviewerRepository reviewerRepository)
         {
             _reviewRepository = reviewRepository;
             _mapper = mapper;
+            _movieRepository = movieRepository;
+            _reviewerRepository = reviewerRepository;
         }
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Review>))]
@@ -59,34 +63,42 @@ namespace MovieReview.Controllers
 
 
         }
-        //[HttpPost]
-        //[ProducesResponseType(204)]
-        //[ProducesResponseType(400)]
+        [HttpPost]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(400)]
 
-        //public IActionResult CreateGenre([FromBody] GenreDTO genreCreate)
-        //{
-        //    if (genreCreate == null)
-        //        return BadRequest(ModelState);
-        //    var genre = _genreRepository.GetGenres()
-        //                .Where(c => c.Name.Trim().ToUpper() == genreCreate.Name.TrimEnd().ToUpper())
-        //                 .FirstOrDefault();
-        //    if (genre != null)
-        //    {
-        //        ModelState.AddModelError("", "Genre alread exists");
-        //        return StatusCode(422, ModelState);
-        //    }
-        //    if (!ModelState.IsValid)
-        //        return BadRequest(ModelState);
-        //    var genreMap = _mapper.Map<Genre>(genreCreate);
-        //    if (!_genreRepository.CreateGenre(genreMap))
-        //    {
-        //        ModelState.AddModelError("", "Something went wromg while saving ");
-        //        return StatusCode(500, ModelState);
+        public IActionResult CreateReview([FromQuery] int reviewerId, [FromQuery] int movieId, [FromBody] ReviewDto reviewCreate)
+        {
+            if (reviewCreate == null)
+                return BadRequest(ModelState);
 
-        //    }
-        //    return Ok("Successfully created");
+            var reviews = _reviewRepository.GetReviews()
+                        .Where(m => m.Title.Trim().ToUpper() == reviewCreate.Title.TrimEnd().ToUpper())
+                         .FirstOrDefault();
+            if (reviews != null)
+            {
+                ModelState.AddModelError("", "review already exists");
+                return StatusCode(422, ModelState);
+            }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            var reviewMap = _mapper.Map<Review>(reviewCreate);
+
+            reviewMap.Movie = _movieRepository.GetMovie(movieId);
+            reviewMap.Reviewer = _reviewerRepository.GetReviewer(reviewerId);
 
 
-        //}
+
+            if (!_reviewRepository.CreateReview( reviewMap))
+            {
+                ModelState.AddModelError("", "Something went wromg while saving ");
+                return StatusCode(500, ModelState);
+
+            }
+            return Ok("Successfully created");
+
+
+        }
     }
-    }
+}
