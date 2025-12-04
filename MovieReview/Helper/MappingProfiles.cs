@@ -19,6 +19,7 @@ namespace MovieReview.Helper
             CreateMap<Review,ReviewDto>();
             CreateMap<ReviewDto,Review>();
             CreateMap<Reviewer,ReviewerDto>();
+            CreateMap<ReviewerDto,Reviewer>();
         }
     }
 }
