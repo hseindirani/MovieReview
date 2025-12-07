@@ -9,6 +9,7 @@ namespace MovieReview.Interfaces
         Country GetCountryByStudio(int studioId);
         bool CountryExist(int id);
         bool CreateCountry(Country country);
+        bool UpdateCountry(Country country);
         bool Save();
 
     }

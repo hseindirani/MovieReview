@@ -44,10 +44,17 @@ namespace MovieReview.Repositories
         {
          return _context.MovieGenres.Where(e =>e.GenreId == genreId).Select(c=> c.Movie).ToList();
         }
+        public bool UpdateGenre(Genre genre)
+        {
+           _context.Update(genre);
+            return Save();
+        }
         public bool Save()
         {
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
         }
+
+     
     }
 }

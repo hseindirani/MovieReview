@@ -85,9 +85,40 @@ namespace MovieReview.Controllers
 
             }
             return Ok("Successfully created");
+        }
 
+            [HttpPut("{countryId}")]
+            [ProducesResponseType(400)]
+            [ProducesResponseType(204)]
+            [ProducesResponseType(404)]
+
+            public IActionResult UpdateCountrt(int countryId, [FromBody] CountryDto updatedcountry)
+            {
+                if (updatedcountry == null)
+                    return BadRequest(ModelState);
+
+                if (countryId != updatedcountry.Id)
+                    return BadRequest(ModelState);
+
+                if (!_countryRepository.CountryExist(countryId))
+                    return NotFound();
+
+                if (!ModelState.IsValid)
+                    return BadRequest();
+                var countryMap = _mapper.Map<Country>(updatedcountry);
+
+                if (!_countryRepository.UpdateCountry(countryMap))
+                {
+
+                    ModelState.AddModelError("", "something went wrong updating country!!");
+                    return StatusCode(500, ModelState);
+                }
+                return NoContent();
+
+
+
+            }
 
 
         }
     }
-}

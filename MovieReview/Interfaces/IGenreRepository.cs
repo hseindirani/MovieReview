@@ -9,6 +9,7 @@ namespace MovieReview.Interfaces
         ICollection<Movie> GetMoviesByGenre(int  genreId);
         bool GenreExists(int id);
         bool CreateGenre(Genre genre);
+        bool UpdateGenre(Genre genre);
         bool Save();
     }
 
