@@ -104,5 +104,38 @@ namespace MovieReview.Controllers
 
 
         }
+        [HttpPut("{studioId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(404)]
+
+        public IActionResult UpdateStudio(int studioId, [FromBody] StudioUpdateDto updatedStudio)
+        {
+            if (updatedStudio == null)
+                return BadRequest(ModelState);
+
+            if (studioId != updatedStudio.Id)
+                return BadRequest(ModelState);
+
+            if (!_studioRepository.StudioExists(studioId))
+                return NotFound();
+
+            if (!ModelState.IsValid)
+                return BadRequest();
+            var studioMap = _mapper.Map<Studio>(updatedStudio);
+
+            if (!_studioRepository.UpdateStudio(studioMap))
+            {
+
+                ModelState.AddModelError("", "something went wrong updating studio!!");
+                return StatusCode(500, ModelState);
+            }
+            return NoContent();
+
+
+
+        }
+
+
     }
 }

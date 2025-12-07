@@ -16,6 +16,7 @@ namespace MovieReview.Helper
             CreateMap<CountryDto, Country>();
             CreateMap<Studio,StudioDto>();
             CreateMap<CreateStudioDto, Studio>();
+            CreateMap<StudioUpdateDto, Studio>();
             CreateMap<Review,ReviewDto>();
             CreateMap<ReviewDto,Review>();
             CreateMap<Reviewer,ReviewerDto>();

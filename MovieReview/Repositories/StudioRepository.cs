@@ -44,13 +44,19 @@ namespace MovieReview.Repositories
 
         public bool StudioExists(int studioId)
         {
-            return _context.Countries.Any(s => s.Id == studioId);
+            return _context.Studios.Any(s => s.Id == studioId);
         }
         public bool Save()
         {
            
             var saved = _context.SaveChanges();
             return saved > 0 ? true : false;
+        }
+
+        public bool UpdateStudio(Studio studio)
+        {
+            _context.Update(studio);
+            return Save();
         }
     }
 }
