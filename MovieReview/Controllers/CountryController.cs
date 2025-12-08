@@ -118,7 +118,31 @@ namespace MovieReview.Controllers
 
 
             }
+        [HttpDelete("{countryId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(204)]
+
+        public IActionResult DeleteCountry(int countryId)
+        {
+            if (!_countryRepository.CountryExist(countryId))
+            {
+                return NotFound();
+            }
+            var CountryToDeelete = _countryRepository.GetCountry(countryId);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_countryRepository.DeleteCountry(CountryToDeelete))
+            {
+                ModelState.AddModelError("", "something went wrong when deleting country!!");
+            }
+            return NoContent();
+
 
 
         }
     }
+}
+
