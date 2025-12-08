@@ -91,18 +91,18 @@ namespace MovieReview.Controllers
         [ProducesResponseType(400)]
         [ProducesResponseType(204)]
         [ProducesResponseType(404)]
-        public IActionResult UpdateGenre(int genreId, [FromBody]GenreDTO updatedGenre)
+        public IActionResult UpdateGenre(int genreId, [FromBody] GenreDTO updatedGenre)
         {
-            if(updatedGenre == null)
+            if (updatedGenre == null)
                 return BadRequest(ModelState);
 
-            if(genreId != updatedGenre.Id)
+            if (genreId != updatedGenre.Id)
                 return BadRequest(ModelState);
 
             if (!_genreRepository.GenreExists(genreId))
                 return NotFound();
 
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
                 return BadRequest();
             var genreMap = _mapper.Map<Genre>(updatedGenre);
 
@@ -117,7 +117,30 @@ namespace MovieReview.Controllers
 
 
         }
+        [HttpDelete("{genreId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(204)]
+        [ProducesResponseType(204)]
+
+        public IActionResult DeleteGenre(int genreId)
+        {
+            if (!_genreRepository.GenreExists(genreId))
+            {
+                return NotFound();
+            }
+            var GenreToDeelete = _genreRepository.GetGenreById(genreId);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_genreRepository.DeleteGenre(GenreToDeelete))
+            {
+                ModelState.AddModelError("", "something went wrong when deleting genre!!");
+            }
+            return NoContent();
 
 
+
+        }
     }
 }

@@ -55,6 +55,10 @@ namespace MovieReview.Repositories
             return saved > 0 ? true : false;
         }
 
-     
+        public bool DeleteGenre(Genre genre)
+        {
+            _context.Remove(genre);
+            return Save();
+        }
     }
 }
