@@ -9,6 +9,7 @@ namespace MovieReview.Interfaces
         ICollection<Review> GetReviewsByAReviewer(int reviewerId); 
         bool ReviewerExists(int reviewerId);
         bool CreateReviewer(Reviewer reviewer);
+        bool UpdateReviewer(Reviewer reviewer);
         bool Save();
     }
 }

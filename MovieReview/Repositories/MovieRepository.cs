@@ -69,5 +69,11 @@ namespace MovieReview.Repositories
             var saved = _context.SaveChanges();
             return saved > 0 ?true : false;
         }
+
+        public bool UpdateMovie(int studioId, int genreId, Movie movie)
+        {
+            _context.Update(movie);
+            return Save();
+        }
     }
 }

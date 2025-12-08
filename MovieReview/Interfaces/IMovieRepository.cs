@@ -10,6 +10,7 @@ namespace MovieReview.Interfaces
         decimal GetMovieRating(int moId);
         bool MovieExist(int moId);
         bool CreateMovie(int studioId,int genreId,Movie movie);
+        bool UpdateMovie(int studioId, int genreId, Movie movie);
         bool Save();
     }
 }
