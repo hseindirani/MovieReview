@@ -15,7 +15,7 @@ namespace MovieReview.Controllers
         private readonly IStudioRepository _studioRepository;
         private readonly IMapper _mapper;
 
-        public StudioController(IStudioRepository studioRepository,IMapper mapper)
+        public StudioController(IStudioRepository studioRepository, IMapper mapper)
         {
             _studioRepository = studioRepository;
             _mapper = mapper;
@@ -69,7 +69,7 @@ namespace MovieReview.Controllers
                 return NotFound();
             }
 
-            var movie =_mapper.Map<List<MovieDto>>(_studioRepository.GetMovieByStudio(studioId));
+            var movie = _mapper.Map<List<MovieDto>>(_studioRepository.GetMovieByStudio(studioId));
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
             return Ok(movie);
@@ -135,7 +135,29 @@ namespace MovieReview.Controllers
 
 
         }
+        [HttpDelete("{studioId}")]
+        [ProducesResponseType(400)]
+        [ProducesResponseType(200)]
+        [ProducesResponseType(204)]
+
+        public IActionResult DeelteStudio(int studioId)
+        {
+            if (!_studioRepository.StudioExists(studioId))
+            {
+                return NotFound();
+            }
+            var StudioToDelete = _studioRepository.GetStudio(studioId);
+
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            if (!_studioRepository.DeleteStudio(StudioToDelete))
+            {
+                ModelState.AddModelError("", "something went wrong when deleting studio!!");
+            }
+            return Ok("Studio deleted successfully!");
 
 
+        }
     }
 }

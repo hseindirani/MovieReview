@@ -58,5 +58,11 @@ namespace MovieReview.Repositories
             _context.Update(studio);
             return Save();
         }
+
+        public bool DeleteStudio(Studio studio)
+        {
+           _context.Remove(studio);
+            return Save();
+        }
     }
 }
