@@ -14,11 +14,13 @@ namespace MovieReview.Controllers
     {
         private readonly IStudioRepository _studioRepository;
         private readonly IMapper _mapper;
+        private readonly ILogger<StudioController> _logger;
 
-        public StudioController(IStudioRepository studioRepository, IMapper mapper)
+        public StudioController(IStudioRepository studioRepository, IMapper mapper, ILogger<StudioController> logger)
         {
             _studioRepository = studioRepository;
             _mapper = mapper;
+            _logger = logger;
         }
         [HttpGet]
         [ProducesResponseType(200, Type = typeof(IEnumerable<Studio>))]
@@ -38,7 +40,8 @@ namespace MovieReview.Controllers
         public IActionResult GetCountry(int studioId)
         {
             if (!_studioRepository.StudioExists(studioId))
-                return NotFound();
+                _logger.LogWarning("Studio with id {StudioId} was not found.", studioId);
+            return NotFound();
             var studio = _mapper.Map<StudioDto>(_studioRepository.GetStudio(studioId));
 
             if (!ModelState.IsValid)
@@ -87,6 +90,7 @@ namespace MovieReview.Controllers
                          .FirstOrDefault();
             if (studio != null)
             {
+                _logger.LogWarning("Attempt to create duplicate studio: {StudioName}", studioCreate.Name);
                 ModelState.AddModelError("", "Studio already exists");
                 return StatusCode(422, ModelState);
             }
@@ -96,6 +100,8 @@ namespace MovieReview.Controllers
             studioMap.CountryId = studioCreate.CountryId;
             if (!_studioRepository.CreateStudio(studioMap))
             {
+                _logger.LogError("Failed to create studio {StudioName} with CountryId {CountryId}",
+                        studioCreate.Name, studioCreate.CountryId);
                 ModelState.AddModelError("", "Something went wromg while saving ");
                 return StatusCode(500, ModelState);
 
@@ -144,6 +150,7 @@ namespace MovieReview.Controllers
         {
             if (!_studioRepository.StudioExists(studioId))
             {
+                _logger.LogWarning("Attempt to delete non-existing studio with id {StudioId}", studioId);
                 return NotFound();
             }
             var StudioToDelete = _studioRepository.GetStudio(studioId);

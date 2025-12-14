@@ -15,13 +15,15 @@ namespace MovieReview.Controllers
         private readonly IStudioRepository _studioRepository;
         private readonly IGenreRepository _genreRepository;
         private readonly IMapper _mapper;
+        private readonly ILogger<MovieController> _logger;
 
-        public MovieController(IMovieRepository movieRepository,IStudioRepository studioRepository,IGenreRepository genreRepository, IMapper mapper)
+        public MovieController(IMovieRepository movieRepository,IStudioRepository studioRepository,IGenreRepository genreRepository, IMapper mapper, ILogger<MovieController> logger)
         {
             _movieRepository = movieRepository;
             _studioRepository = studioRepository;
             _genreRepository = genreRepository;
             _mapper = mapper;
+            _logger = logger;
         }
 
         [HttpGet]
@@ -82,6 +84,7 @@ namespace MovieReview.Controllers
                          .FirstOrDefault();
             if (movie != null)
             {
+                _logger.LogWarning("Attempt to create duplicate movie: {MovieName}", movieCreate.Name);
                 ModelState.AddModelError("", "Movie already exists");
                 return StatusCode(422, ModelState);
             }
@@ -91,6 +94,8 @@ namespace MovieReview.Controllers
 
             if (!_movieRepository.CreateMovie(studioId,genreId,movieMap))
             {
+                _logger.LogError("Failed to create movie {MovieName} with StudioId {StudioId} and GenreId {GenreId}",
+                   movieCreate.Name, studioId, genreId);
                 ModelState.AddModelError("", "Something went wromg while saving ");
                 return StatusCode(500, ModelState);
 
@@ -121,6 +126,7 @@ namespace MovieReview.Controllers
 
             if (!_movieRepository.UpdateMovie(studioId,genreId,movieMap))
             {
+                _logger.LogError("Failed to update movie {MovieId}", movieId);
 
                 ModelState.AddModelError("", "something went wrong updating movie!!");
                 return StatusCode(500, ModelState);
