@@ -17,6 +17,8 @@ Swagger UI for testing endpoints
 
 Built-in Logging (warnings & errors)
 
+JWT Authentication (Bearer tokens)
+
 📌 Main Features
 
 ✔ CRUD for Movies, Genres, Studios, Reviewers, Reviews
@@ -32,6 +34,8 @@ Built-in Logging (warnings & errors)
 ✔ Clean Repository/Interface architecture
 
 ✔ Basic server-side logging for debugging and diagnostics
+
+✔ JWT login endpoint and role-based authorization
 
 🧪 Seeding the Database
 
