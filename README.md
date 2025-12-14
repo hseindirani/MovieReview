@@ -15,6 +15,8 @@ Repository Pattern
 
 Swagger UI for testing endpoints
 
+Built-in Logging (warnings & errors)
+
 📌 Main Features
 
 ✔ CRUD for Movies, Genres, Studios, Reviewers, Reviews
@@ -28,6 +30,8 @@ Swagger UI for testing endpoints
 ✔ Error handling & validation
 
 ✔ Clean Repository/Interface architecture
+
+✔ Basic server-side logging for debugging and diagnostics
 
 🧪 Seeding the Database
 
