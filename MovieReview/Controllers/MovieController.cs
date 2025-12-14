@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 using MovieReview.Dto;
 using MovieReview.Interfaces;
 using MovieReview.Models;
@@ -70,6 +71,7 @@ namespace MovieReview.Controllers
 
 
         }
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ProducesResponseType(204)]
         [ProducesResponseType(400)]
